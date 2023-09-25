@@ -4,9 +4,30 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <!-- Contact, Address, Person bean 만들기(<property>, <constructor-arg>) -->
+  <!-- <property> -->
   <bean class="com.gdu.app02.xml01.Contact" id="contact">
     <property name="mobile" value="010-1111-1111"/>
     <property name="fax" value="01-234-567"/>
+  </bean>
+  
+  <bean class="com.gdu.app02.xml01.Address" id="address">
+    <property name="postcode" value="98765"/>
+    <property name="jibun" value="642번지"/>
+    <property name="road" value="가산로"/>
+  </bean>
+  
+  <bean class="com.gdu.app02.xml01.Person" id="person">
+    <property name="name" value="홍길동"/>
+    <property name="contact" ref="contact"/>
+    <property name="address" ref="address"/>
+  </bean>
+  
+
+  <!-- <constructor-arg -->
+  <!--
+  <bean class="com.gdu.app02.xml01.Contact" id="contact">
+    <constructor-arg value="010-1111-1111"/>
+    <constructor-arg value="01-234-567"/>
   </bean>
   
   <bean class="com.gdu.app02.xml01.Address" id="address">
@@ -16,10 +37,10 @@
   </bean>
   
   <bean class="com.gdu.app02.xml01.Person" id="person">
-    <property name="name" value="홍길동"/>
-    <property name="contact" ref="contact"></property>
-    <property name="address" ref="address"></property>
+    <constructor-arg value="홍길동"/>
+    <constructor-arg ref="contact"/>
+    <constructor-arg ref="address"/>
   </bean>
-
+  -->
 
 </beans>
