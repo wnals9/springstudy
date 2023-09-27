@@ -18,6 +18,10 @@
   <br>
   
   <a href="${contextPath}/article/main.do">세션 초기화하고 main 화면으로 가기</a>
+  
+  <br>
+  
+  <a href="${contextPath}/article/confirm.do">세션 확인하기</a>
 
 </body>
 </html>
