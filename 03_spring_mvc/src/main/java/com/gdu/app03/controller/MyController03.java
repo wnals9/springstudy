@@ -62,7 +62,6 @@ public class MyController03 {
   
   
   // @ModelAttribute를 이용해서 Model에 저장되는 커맨드 객체의 이름을 지정할 수 있다.
-  
   @RequestMapping("/blog/detail.do")
   public String blogDetail4(@ModelAttribute("dto") BlogDto blogDto) {  // Model에 저장되는 이름은 dto 이다.
     return "blog/detail";
