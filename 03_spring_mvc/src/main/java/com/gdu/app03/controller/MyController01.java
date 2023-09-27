@@ -26,18 +26,18 @@ public class MyController01 {
   
   // value="/"         : contextPath 요청을 의미한다. http://localhost/app03/ 주소를 의미한다.
   // value="/main.do"  : /main.do 요청을 의미한다.    http://localhost/app03/main.do 주소를 의미한다.
-  @RequestMapping(value="/", method=RequestMethod.GET)
+  @RequestMapping(value={"/", "/main.do"}, method=RequestMethod.GET)
   public String welcome() {
     // ViewResolver의 prefix : /WEB-INF/views/
     // ViewResolver의 suffix : .jsp
-    return "index";
+    return "index";  //        /WEB-INF/views/index.jsp
   }
   
   @RequestMapping(value="/board/list.do", method=RequestMethod.GET)
   public String boardList() {
     // ViewResolver의 prefix : /WEB-INF/views/
     // ViewResolver의 suffix : .jsp
-    return "board/list";    //  /WEB-INF/views/board/list.jsp
+    return "board/list";   //  /WEB-INF/views/board/list.jsp
   }
   
 
