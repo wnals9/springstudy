@@ -56,7 +56,7 @@ public class MyController03 {
    */
   
   // @RequestMapping("/blog/detail.do")
-  public String blogDetail3(BlogDto dto, Model model) {  // Model에 저장된 이름은 dto가 아니라 blogDro이다.
+  public String blogDetail3(BlogDto dto, Model model) {  // Model에 저장된 이름은 dto가 아니라 blogDto이다.
     return "blog/detail";
   }
   

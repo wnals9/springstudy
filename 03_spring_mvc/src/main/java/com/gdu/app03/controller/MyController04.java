@@ -16,7 +16,7 @@ public class MyController04 {
   
   /************************** 세션에 저장하기 **************************/
   
-  /*ㅠ
+  /*
    * 1. HttpServletRequest로부터 HttpSession 얻기
    */
   // @GetMapping("/article/add.do")
