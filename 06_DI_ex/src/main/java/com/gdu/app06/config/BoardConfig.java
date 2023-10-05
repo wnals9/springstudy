@@ -16,7 +16,7 @@ public class BoardConfig {
     return new BoardDto(1, "제목1", "작성자1");
   }
   
-  @Bean
+  @Bean 
   public BoardDto boardDto2() {  // <bean class="BoardDto" id="boardDto2" />
     return new BoardDto(2, "제목2", "작성자2");
   }

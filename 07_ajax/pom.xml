@@ -4,8 +4,8 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.gdu</groupId>
-  <artifactId>app06</artifactId>
-  <name>06_DI_ex</name>
+  <artifactId>app07</artifactId>
+  <name>07_ajax</name>
   <packaging>war</packaging>
   <version>1.0.0-BUILD-SNAPSHOT</version>
 
@@ -17,6 +17,14 @@
   </properties>
 
   <dependencies>
+  
+    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.15.2</version>
+    </dependency>
+    
   
     <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
     <dependency>
