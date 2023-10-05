@@ -11,6 +11,9 @@ import com.gdu.app05.service.BoardService;
 @Controller  // 컨트롤러 전용 @Component
 public class BoardController {
 
+  
+  /************************** DI ************************************/
+  
   // 주입된 boardService 객체의 변경 방지를 위해 final 처리한다.
   private final BoardService boardService;
   
@@ -22,7 +25,8 @@ public class BoardController {
     this.boardService = boardService;
   }
 
-  /*************************** Method *******************************/
+  
+  /************************** Method ************************************/
   
   @RequestMapping(value="/board/list.do", method=RequestMethod.GET)
   public String list(Model model) {
