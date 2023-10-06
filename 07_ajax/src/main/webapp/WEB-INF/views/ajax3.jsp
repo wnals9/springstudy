@@ -36,10 +36,13 @@
   function fnDetail(){
     $(document).on('click', '.row', function(){
    	  $.ajax({
-   		// 요청
-   		type: 'get',
+   		// 요청	 						  // (JSON 데이터를 서버로 보내기)
+   		type: 'post',  				 	  // post 방식은 서버로 보낼 데이터를 요청 본문에 저장하는 방식이다.
    		url: '${contextPath}/ajax3/detail.do',
-   		data: 'name=' + $(this).data('name'),
+   		contentType: 'application/json',  // 서버로 보내는 요청 데이터의 타입
+   		data: JSON.stringify({			  // 문자열 형식의 JSON 데이터를 보낸다. 파라미터로 보내는 방식이 아니다.
+   				'name': $(this).data('name')
+   			  }),
    		// 응답
    		dataType: 'json',
    		success: function(resData){
