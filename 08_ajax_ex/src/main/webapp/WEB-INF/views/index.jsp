@@ -53,6 +53,12 @@
     <div id="profile"></div>
     <div id="bmi_info"></div>
   </div>
+  
+  <hr>
+  
+  <div>
+    <a href="${contextPath}/shop.go">쇼핑하러가기</a>
+  </div>
 
 </body>
 </html>
