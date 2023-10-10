@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 
 import org.springframework.stereotype.Component;
 
-@Component  // JdbcConnection 객체(Bean)를 Spring Container에 저장해 둔
+@Component  // JdbcConnection 객체(Bean)를 Spring Container에 저장해 둔다.
 public class JdbcConnection {
 
   public Connection getConnection() {
@@ -30,4 +30,5 @@ public class JdbcConnection {
       e.printStackTrace();
     }
   }
+  
 }
