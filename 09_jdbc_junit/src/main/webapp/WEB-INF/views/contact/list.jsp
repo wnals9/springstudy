@@ -44,6 +44,7 @@
     <div>
       <a href="${contextPath}/contact/write.do">새연락처등록</a>
     </div>
+    
     <table border="1">
       <thead>
         <tr>

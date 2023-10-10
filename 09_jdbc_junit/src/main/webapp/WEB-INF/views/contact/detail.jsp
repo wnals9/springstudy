@@ -30,7 +30,8 @@
   function fnDeleteContact(){
 	$('#btn_delete').click(function(){
 	  if(confirm('연락처를 삭제할까요?')){
-		location.href = '${contextPath}/contact/delete.do?contact_no=${contact.contact_no}';
+		$('#frm_detail').attr('action', '${contextPath}/contact/delete.do');
+		$('#frm_detail').submit();
 	  }
 	})
   }
@@ -47,7 +48,7 @@
 
   <div>
     <h3>연락처관리</h3>
-    <form method="post" action="${contextPath}/contact/modify.do">
+    <form id="frm_detail" method="post" action="${contextPath}/contact/modify.do">
       <div>
         <label for="name">이름</label>
         <input type="text" id="name" name="name" value="${contact.name}">
