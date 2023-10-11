@@ -46,6 +46,8 @@ public class AppConfig {
     return new DataSourceTransactionManager(dataSource());
   }
   
+  /* 지금부터 AOP를 이용한 트랜잭션 처리를 위해 필요한 Bean */
+  
   // TransactionInterceptor : 트랜잭션 처리를 위해 언제 rollback 할 것인지 정의하는 스프링 클래스
   @Bean
   public TransactionInterceptor transactionInterceptor() {
