@@ -56,7 +56,6 @@ public class AppConfig {
     RuleBasedTransactionAttribute ruleBasedTransactionAttribute = new RuleBasedTransactionAttribute();
     ruleBasedTransactionAttribute.setRollbackRules(Collections.singletonList(new RollbackRuleAttribute(Exception.class)));
     
-    //
     MatchAlwaysTransactionAttributeSource matchAlwaysTransactionAttributeSource = new MatchAlwaysTransactionAttributeSource();
     matchAlwaysTransactionAttributeSource.setTransactionAttribute(ruleBasedTransactionAttribute);
     
