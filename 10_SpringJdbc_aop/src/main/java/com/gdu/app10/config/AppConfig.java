@@ -2,9 +2,13 @@ package com.gdu.app10.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import com.gdu.app10.aop.BeforeAop;
+
+@EnableAspectJAutoProxy  // AOP 동작을 허용한다
 @Configuration
 public class AppConfig {
   
@@ -23,6 +27,11 @@ public class AppConfig {
   @Bean
   public JdbcTemplate jdbcTemplate() {
     return new JdbcTemplate(driverManagerDataSource());
+  }
+  
+  @Bean
+  public BeforeAop beforeAop() {
+    return new BeforeAop();
   }
   
 }
