@@ -13,7 +13,7 @@
 
 
 3. 어드바이스 동작 순서
-  @Before  -> @Around  -> @After
+   @Around -> @Before -> @After
 
 
 4. 표현식(Expression) 작성 방법
