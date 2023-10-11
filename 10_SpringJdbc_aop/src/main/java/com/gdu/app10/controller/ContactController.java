@@ -62,5 +62,15 @@ public class ContactController {
     return "redirect:/contact/list.do";
   }
   
+  @RequestMapping(value="/contact/tx.do", method=RequestMethod.GET)
+  public String txTest() {
+    try {
+      contactService.txTest();
+    } catch(Exception e) {
+      return "redirect:/contact/list.do";
+    }
+    return null;  // 동작 안하는 코드
+  }
+  
   
 }
