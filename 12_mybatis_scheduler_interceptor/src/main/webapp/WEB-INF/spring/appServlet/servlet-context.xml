@@ -23,6 +23,12 @@
 	
 	<context:component-scan base-package="com.gdu.app12" />
 	
-	
+	<interceptors>
+      <interceptor>
+        <mapping path="/**"/>
+        <exclude-mapping path="/contact/list.do"/>
+        <beans:bean class="com.gdu.app12.intercept.MyInterceptor"/>
+      </interceptor>
+    </interceptors>
 	
 </beans:beans>

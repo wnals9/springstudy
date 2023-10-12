@@ -20,5 +20,6 @@ public interface ContactMapper {
   public int update(ContactDto contactDto);
   public int delete(int contactNo);
   public List<ContactDto> selectList();
-  public ContactDto selectContactByNo(int contactNo); 
+  public ContactDto selectContactByNo(int contactNo);
+  public int deleteOldestContact();
 }

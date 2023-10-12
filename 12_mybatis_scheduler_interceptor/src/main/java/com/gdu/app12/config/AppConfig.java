@@ -12,16 +12,18 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+@EnableTransactionManagement  // @Transactional 허용
+@EnableAspectJAutoProxy       // @Aspect 허용
+@EnableScheduling             // @Scheduled 허용
 @MapperScan(basePackages="com.gdu.app12.dao")
 @PropertySource(value="classpath:application.properties")
-@EnableTransactionManagement  // @Transactional 허용
-@EnableAspectJAutoProxy  // AOP 동작을 허용한다
 @Configuration
 public class AppConfig {
   

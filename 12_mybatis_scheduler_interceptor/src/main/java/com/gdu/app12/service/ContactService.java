@@ -11,4 +11,5 @@ public interface ContactService {
   public List<ContactDto> getContactList();
   public ContactDto getContactByNo(int contactNo);
   public void txTest();
+  public void deleteOldestContact();
 }
