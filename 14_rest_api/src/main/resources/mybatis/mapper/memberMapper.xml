@@ -27,5 +27,10 @@
               FROM MEMBER_T)
      WHERE RN BETWEEN #{begin} AND #{end} 
   </select>
+  
+  <select id="getMemberCount" resultType="int">
+    SELECT COUNT(*)
+      FROM MEMBER_T
+  </select>
 
 </mapper>

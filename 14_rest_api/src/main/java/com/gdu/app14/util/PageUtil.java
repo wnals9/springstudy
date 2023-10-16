@@ -1,10 +1,13 @@
 package com.gdu.app14.util;
 
+import org.springframework.stereotype.Component;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
+@Component
 public class PageUtil {
 
   private int page;     // 현재 페이지 번호(요청 파라미터로 받는다.)
@@ -80,4 +83,38 @@ public class PageUtil {
     
   }
   
+  public String getAjaxPaging() {
+    
+    StringBuilder sb = new StringBuilder();
+    
+    sb.append("<div>");
+    
+    // 이전 블록
+    if(beginPage == 1) {
+      sb.append("<span>이전</span>");
+    } else {
+      sb.append("<a href=\"javascript:fnAjaxPaging(" + (beginPage-1) + ")\">이전</a>");
+    }
+    
+    // 페이지 번호
+    for(int p = beginPage; p <= endPage; p++) {
+      if(p == page) {
+        sb.append("<span>" + p + "</span>");
+      } else {
+        sb.append("<a href=\"javascript:fnAjaxPaging(" + p + ")\">" + p + "</a>");
+      }
+    }
+    
+    // 다음 블록
+    if(endPage == totalPage) {
+      sb.append("<span>다음</span>");
+    } else {
+      sb.append("<a href=\"javascript:fnAjaxPaging(" + (endPage + 1) + ")\">다음</a>");
+    }
+    
+    sb.append("</div>");
+    
+    return sb.toString();
+    
+  }
 }
