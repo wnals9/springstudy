@@ -76,12 +76,6 @@
     })
   }
   
-  // 페이지를 바꿀때마다 호출되는 fnAjaxPaging 함수
-  function fnAjaxPaging(p){
-	page = p;		  // 페이지 번호를 바꾼다.
-	fnMemberList();	  // 새로운 목록을 가져온다.
-  }
-  
   // 전체 선택을 클릭하면 개별 선택에 영향을 미친다.
   function fnChkAll(){
     $('#chk_all').click(function(){
@@ -100,7 +94,11 @@
 	})
   }
   
-  
+  // 페이지를 바꿀때마다 호출되는 fnAjaxPaging 함수
+  function fnAjaxPaging(p){
+	page = p;		  // 페이지 번호를 바꾼다.
+	fnMemberList();	  // 새로운 목록을 가져온다.
+  }
 
 </script>
 
