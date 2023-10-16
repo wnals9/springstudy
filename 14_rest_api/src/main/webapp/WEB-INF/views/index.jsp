@@ -7,12 +7,19 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+  #paging a {
+    margin: 10px;
+  }
+</style>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
 
   $(function(){
 	fnMemberRegister();
 	fnMemberList();
+	fnChkOne();
+	fnChkAll();
   })
   
   // 회원 등록
@@ -75,6 +82,23 @@
 	fnMemberList();	  // 새로운 목록을 가져온다.
   }
   
+  // 전체 선택을 클릭하면 개별 선택에 영향을 미친다.
+  function fnChkAll(){
+    $('#chk_all').click(function(){
+       $('.chk_one').prop('checked', $(this).prop('checked'));
+    })
+  }
+  
+  // 개별 선택을 클릭하면 전체 선택에 영향을 미친다.
+  function fnChkOne(){
+	$(document).on('click', '.chk_one', function(){
+      var total = 0;
+      $.each($('.chk_one'), function(i, elem){
+    	total += $(elem).prop('checked');
+      })
+      $('#chk_all').prop('checked', total === $('.chk_one').length);
+	})
+  }
   
   
 
