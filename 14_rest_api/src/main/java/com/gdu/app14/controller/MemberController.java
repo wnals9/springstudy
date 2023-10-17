@@ -1,5 +1,6 @@
 package com.gdu.app14.controller;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
  *  2) 상세 /members/1  GET
  *  3) 삽입 /members    POST
  *  4) 수정 /members    PUT
- *  5) 삭제 /members/1  DELETE
+ *  5) 삭제 /member/1   DELETE        /members/4,3,2        
  */
 
 @RequiredArgsConstructor
@@ -61,6 +62,18 @@ public class MemberController {
   @RequestMapping(value="/members", method=RequestMethod.PUT, produces="application/json")
   public Map<String, Object> modifyMember(@RequestBody MemberDto memberDto) {
     return memberService.modifyMember(memberDto);
+  }
+  
+  // 회원 정보 삭제 요청
+  @RequestMapping(value="/member/{memberNo}", method=RequestMethod.DELETE, produces="application/json")
+  public Map<String, Object> removeMember(@PathVariable(value="memberNo") int memberNo){
+    return memberService.removeMember(memberNo);
+  }
+  
+  // 회원들 정보 삭제 요청
+  @RequestMapping(value="/members/{memberNoList}", method=RequestMethod.DELETE, produces="application/json")
+  public Map<String, Object> removeMembers(@PathVariable(value="memberNoList") String memberNoList) {
+    return memberService.removeMembers(memberNoList);
   }
   
 }

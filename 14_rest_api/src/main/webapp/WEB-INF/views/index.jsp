@@ -23,6 +23,8 @@
 	fnChkAll();
 	fnInit();
 	fnMemberModify();
+	fnRemoveMember();
+	fnRemoveMembers();
   })
   
   // 입력란 초기화
@@ -34,6 +36,7 @@
 	$('#address').val('');
 	$('#btn_register').prop('disabled', false);
 	$('#btn_modify').prop('disabled', true);
+	$('#btn_remove').prop('disabled', true);
   }
   
   // 회원 등록
@@ -145,11 +148,13 @@
 			$('#address').val(member.address);
 			$('#btn_register').prop('disabled', true);
 			$('#btn_modify').prop('disabled', false);
+			$('#btn_remove').prop('disabled', false);
 		  }
 		}
 	  })
 	});
   }
+  
   
   // 회원 정보 수정하기
   function fnMemberModify(){
@@ -178,7 +183,70 @@
 	  })
 	})
   }
-
+  
+  //회원 정보 삭제
+  function fnRemoveMember(){
+    $('#btn_remove').click(function(){
+  	  if(!confirm('회원 정보를 삭제할까요?')){
+	  	return;
+  	  }
+  	  $.ajax({
+      // 요청
+      type: 'delete',
+      url: '${contextPath}/member/' + $('#memberNo').val(),
+      // 응답
+      dataType: 'json',
+      success: function(resData){
+  	  	if(resData.removeResult === 1){
+  		  alert('회원 정보가 삭제되었습니다.');
+        page = 1;
+        fnMemberList();
+        fnInit();
+  	  } else {
+  		alert('회원 정보가 삭제되지 않았습니다.');
+  	  }
+    }
+	  })
+  })
+}
+  
+  // 회원들의 정보 삭제
+  function fnRemoveMembers(){
+	$('#btn_remove_list').click(function(){
+	  // 체크된 요소의 value를 배열 arr에 저장하기(push 메소드)
+	  var arr = [];
+	  var chkOne = $('.chk_one');  //  $('.chk_one') = 배열
+	  $.each(chkOne, function(i, elem){
+		if($(elem).is(':checked')){  //  if($(elem).prop('checked'))
+		  arr.push($(elem).val());
+		}			
+	  })
+	  console.log(arr.join(','));
+	  // 체크된 요소가 없으면 삭제 중지
+	  if(arr.length === 0){
+		alert('선택된 회원 정보가 없습니다. 다시 시도하세요.');
+		return;
+	  }
+	  // 선택된 회원 삭제
+	  $.ajax({
+		// 요청
+		type: 'delete',
+		url: '${contextPath}/members/' + arr.join(','),
+		// 응답
+		dataType: 'json',
+		success: function(resData){
+		  if(resData.removeResult > 0){
+			alert('선택한 회원 정보들이 삭제되었습니다.');
+			page = 1;
+	        fnMemberList();
+	        fnInit();
+		  } else {
+			alert('선택한 회원 정보들이 삭제되지 않았습니다.');
+		  }
+		}
+	  })
+	})
+  }
 </script>
  
 </head>
@@ -216,12 +284,16 @@
       <button type="button" onclick="fnInit()">초기화</button>
       <button type="button" id="btn_register">등록</button>
       <button type="button" id="btn_modify">수정</button>
+      <button type="button" id="btn_remove">삭제</button>
     </div>
   </div>
   
   <hr>
   
   <div>
+    <div>
+      <button type="button" id="btn_remove_list">선택삭제</button>
+    </div>
     <table border="1">
       <thead>
         <tr>
