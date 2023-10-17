@@ -1,10 +1,12 @@
 package com.gdu.app14.service;
 
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.gdu.app14.dao.MemberMapper;
@@ -21,15 +23,26 @@ public class MemberServiceImpl implements MemberService {
   private final PageUtil pageUtil;
   
   @Override
-  public Map<String, Object> register(MemberDto memberDto, HttpServletResponse httpServletResponse) {
+  public Map<String, Object> register(MemberDto memberDto, HttpServletResponse response) {
     
     Map<String, Object> map = null;
     
+    response.setContentType("text/plain");
+    PrintWriter out = null;
+    
     try {
+      
+      out = response.getWriter();
       
       int addResult = memberMapper.insertMember(memberDto);
       map = Map.of("addResult", addResult);
       
+    } catch(DuplicateKeyException e) {  // UNIQUE 칼럼에 중복 값이 전달된 경우에 발생
+                                        // $.ajax({})의 error 속성으로 응답됨
+      response.setStatus(500);                   // 예외객체 jqXHR의 status 속성으로 확인함
+      out.print("이미 사용중인 아이디입니다.");  // 예외객체 jqXHR의 responseText 속성으로 확인함
+      out.flush();
+      out.close();
     } catch (Exception e) {
       System.out.println(e.getClass().getName());  // 발생한 예외 클래스의 이름 확인
     }
@@ -52,8 +65,14 @@ public class MemberServiceImpl implements MemberService {
     List<MemberDto> memberList = memberMapper.getMemberList(map);
     String paging = pageUtil.getAjaxPaging();
     
-    return Map.of("memberList", memberList, "paging", paging);
+    return Map.of("memberList", memberList
+                , "paging", paging);
     
+  }
+  
+  @Override
+  public MemberDto getMember(int memberNo) {
+    return memberMapper.getMember(memberNo);
   }
 
 }

@@ -32,5 +32,11 @@
     SELECT COUNT(*)
       FROM MEMBER_T
   </select>
+  
+  <select id="getMember" parameterType="int" resultType="MemberDto">
+    SELECT MEMBER_NO, ID, NAME, GENDER, ADDRESS
+      FROM MEMBER_T
+     WHERE MEMBER_NO = #{memberNo}
+  </select>
 
 </mapper>

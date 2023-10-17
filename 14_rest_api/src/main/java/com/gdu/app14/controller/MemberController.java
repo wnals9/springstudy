@@ -51,4 +51,10 @@ public class MemberController {
     return memberService.getMembers(page);
   }
   
+  // 회원 조회 요청
+  @RequestMapping(value="/members/{mNo}", method=RequestMethod.GET, produces="application/json")
+  public MemberDto getMember(@PathVariable(value="mNo") int memberNo) {
+    return memberService.getMember(memberNo);
+  }
+  
 }
