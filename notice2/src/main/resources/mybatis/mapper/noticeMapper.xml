@@ -39,4 +39,10 @@
      WHERE NOTICE_NO = #{noticeNo}
   </update>
   
+  <delete id="deleteNotice" parameterType="int">
+    DELETE
+      FROM NOTICE_T
+     WHERE NOTICE_NO = #{noticeNo}
+  </delete>
+  
 </mapper>

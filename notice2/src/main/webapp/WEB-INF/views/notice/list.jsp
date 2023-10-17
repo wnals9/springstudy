@@ -20,6 +20,15 @@
     }
   }
   
+  var deleteResult = '${deleteResult}';
+  if(deleteResult !== ''){
+	if(deleteResult === '1'){
+	  alert('공지사항이 삭제되었습니다.');
+	} else {
+	  alert('공지사항이 삭제되지 않았습니다.');
+	}
+  }
+  
 </script>
 </head>
 <body>

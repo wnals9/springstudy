@@ -26,7 +26,7 @@
     <div>
       <button type="button" id="btn_back">뒤로가기</button>
     </div>
-    <form method="post" action="${contextPath}/notice/modify.do">
+    <form id="frm_detail" method="post" action="${contextPath}/notice/modify.do">
       <select name="gubun" id="gubun">
         <option value="1">긴급</option>
         <option value="2">일반</option>
@@ -35,6 +35,7 @@
       <input type="text" name="content" id="content">
       <input type="hidden" name="noticeNo" id="noticeNo">
       <button type="submit">편집완료</button>
+      <button type="button" id="btn_delete">삭제</button>
     </form>
     <script>
       $('#gubun').val('${notice.gubun}');
@@ -62,6 +63,16 @@
   	  $('#b').hide();
   	})
   	
+  	// 삭제 클릭
+  	$('#btn_delete').click(function(){
+  	  if(!confirm('공지사항을 삭제할까요?')){
+  		return;
+  	  } else {
+  		$('#frm_detail').attr('action', '${contextPath}/notice/delete.do');
+  		$('#frm_detail').submit();
+  	  }
+  	})
+  	
   	var modifyResult = '${modifyResult}';  // '', '1', '0'
   	if(modifyResult !== ''){
   	  if(modifyResult === '1'){
@@ -70,6 +81,8 @@
   		alert('공지사항이 수정되지 않았습니다.');
   	  }
   	}
+  	
+   
   
   </script>
 
