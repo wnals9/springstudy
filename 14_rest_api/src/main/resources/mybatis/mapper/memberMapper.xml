@@ -38,5 +38,13 @@
       FROM MEMBER_T
      WHERE MEMBER_NO = #{memberNo}
   </select>
+  
+  <update id="updateMember" parameterType="MemberDto">
+    UPDATE MEMBER_T
+       SET NAME = #{name}
+         , GENDER = #{gender}
+         , address = #{address}
+     WHERE MEMBER_NO = #{memberNo}
+  </update>
 
 </mapper>

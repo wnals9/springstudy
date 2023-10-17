@@ -1,6 +1,7 @@
 package com.gdu.app14.service;
 
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,8 +72,16 @@ public class MemberServiceImpl implements MemberService {
   }
   
   @Override
-  public MemberDto getMember(int memberNo) {
-    return memberMapper.getMember(memberNo);
+  public Map<String, Object> getMember(int memberNo) {
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.put("member" ,memberMapper.getMember(memberNo));
+    return map;
+  }
+  
+  @Override
+  public Map<String, Object> modifyMember(MemberDto memberDto) {
+    int modifyResult = memberMapper.updateMember(memberDto);
+    return Map.of("modifyResult", modifyResult);
   }
 
 }

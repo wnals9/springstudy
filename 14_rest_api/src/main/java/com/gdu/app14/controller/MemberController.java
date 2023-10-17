@@ -53,8 +53,14 @@ public class MemberController {
   
   // 회원 조회 요청
   @RequestMapping(value="/members/{mNo}", method=RequestMethod.GET, produces="application/json")
-  public MemberDto getMember(@PathVariable(value="mNo") int memberNo) {
+  public Map<String, Object> getMember(@PathVariable(value="mNo") int memberNo) {
     return memberService.getMember(memberNo);
+  }
+  
+  // 회원 정보 수정 요청
+  @RequestMapping(value="/members", method=RequestMethod.PUT, produces="application/json")
+  public Map<String, Object> modifyMember(@RequestBody MemberDto memberDto) {
+    return memberService.modifyMember(memberDto);
   }
   
 }

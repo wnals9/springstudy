@@ -22,4 +22,7 @@ public interface MemberMapper {
   // 회원 조회
   public MemberDto getMember(int memberNo);
   
+  // 회원 정보 수정
+  public int updateMember(MemberDto memberDto);
+  
 }

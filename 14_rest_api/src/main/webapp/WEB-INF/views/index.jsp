@@ -21,14 +21,19 @@
 	fnMemberDetail();
 	fnChkOne();
 	fnChkAll();
+	fnInit();
+	fnMemberModify();
   })
   
   // 입력란 초기화
   function fnInit(){
-	$('#id').val('');
+	$('#memberNo').val('');
+	$('#id').val('').prop('disabled', false);
 	$('#name').val('');
 	$(':radio[value=none]').prop('checked', true);
 	$('#address').val('');
+	$('#btn_register').prop('disabled', false);
+	$('#btn_modify').prop('disabled', true);
   }
   
   // 회원 등록
@@ -129,17 +134,49 @@
 		// 응답
 		dataType: 'json',
 		success: function(resData){
-		  if(!resData){
+	      var member = resData.member;
+		  if(!member){
 			alert('회원 정보를 조회할 수 없습니다.');
 		  } else {
-			$('#id').val(resData.id);
-			$('#name').val(resData.name);
-			$(':radio[value=' + resData.gender + ']').prop('checked', true);
-			$('#address').val(resData.address);
+			$('#memberNo').val(member.memberNo);
+			$('#id').val(member.id).prop('disabled', true);
+			$('#name').val(member.name);
+			$(':radio[value=' + member.gender + ']').prop('checked', true);
+			$('#address').val(member.address);
+			$('#btn_register').prop('disabled', true);
+			$('#btn_modify').prop('disabled', false);
 		  }
 		}
 	  })
 	});
+  }
+  
+  // 회원 정보 수정하기
+  function fnMemberModify(){
+	$('#btn_modify').click(function(){
+	  $.ajax({
+        // 요청
+        type: 'put',
+        url: '${contextPath}/members',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          memberNo: $('#memberNo').val(),
+          name: $('#name').val(),
+          gender: $(':radio:checked').val(),
+          address: $('#address').val() 
+        }),
+        // 응답
+        dataType: 'json',
+        success: function(resData){
+       	  if(resData.modifyResult === 1){
+       		alert('회원 정보가 수정되었습니다.');
+       		fnMemberList();
+       	  } else {
+       		alert('회원 정보가 수정되지 않았습니다.');  
+       	  }
+        }
+	  })
+	})
   }
 
 </script>
@@ -174,6 +211,7 @@
         <option>인천</option>
       </select>
     </div>
+    <input type="hidden" id="memberNo">
     <div>
       <button type="button" onclick="fnInit()">초기화</button>
       <button type="button" id="btn_register">등록</button>
