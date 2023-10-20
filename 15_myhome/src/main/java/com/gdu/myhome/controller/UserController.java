@@ -1,8 +1,12 @@
 package com.gdu.myhome.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +25,7 @@ public class UserController {
   
   private final UserService userService;
   
-  @GetMapping(value="/login.form")
+  @GetMapping("/login.form")
   public String loginForm(HttpServletRequest request, Model model) {
     // referer : 이전 주소가 저장되는 요청 Header 값
     String referer = request.getHeader("referer");
@@ -29,22 +33,22 @@ public class UserController {
     return "user/login";
   }
   
-  @PostMapping(value="/login.do")
+  @PostMapping("/login.do")
   public void login(HttpServletRequest request, HttpServletResponse response) {
     userService.login(request, response);
   }
   
-  @GetMapping(value="/logout.do")
+  @GetMapping("/logout.do")
   public void logout(HttpServletRequest request, HttpServletResponse response) {
     userService.logout(request, response);
   }
   
-  @GetMapping(value="/agree.form")
+  @GetMapping("/agree.form")
   public String agreeForm() {
     return "user/agree";
   }
   
-  @GetMapping(value="/join.form")
+  @GetMapping("/join.form")
   public String joinForm(@RequestParam(value="service", required=false, defaultValue="off") String service
                        , @RequestParam(value="event", required=false, defaultValue="off") String event
                        , Model model) {
@@ -57,4 +61,19 @@ public class UserController {
     }
     return rtn;
   }
+  
+  @GetMapping(value="/checkEmail.do", produces=MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam String email) {
+    System.out.println(email);
+    return userService.checkEmail(email);
+  }
+  
+  @GetMapping(value="/sendCode.do", produces=MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Map<String, Object>> sendCode(@RequestParam String email) {
+   return userService.sendCode(email); 
+  }
+  
+  
+  
+  
 }
