@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gdu.myhome.service.UserService;
 
@@ -42,5 +43,18 @@ public class UserController {
   public String agreeForm() {
     return "user/agree";
   }
-
+  
+  @GetMapping(value="/join.form")
+  public String joinForm(@RequestParam(value="service", required=false, defaultValue="off") String service
+                       , @RequestParam(value="event", required=false, defaultValue="off") String event
+                       , Model model) {
+    String rtn = null;
+    if(service.equals("off")) {
+      rtn = "redirect:/main.do";
+    } else {
+      model.addAttribute("event", event);  // user 폴더 join.jsp로 전달하는 event는 "on" 또는 "off" 값을 가진다.
+      rtn = "user/join";
+    }
+    return rtn;
+  }
 }
