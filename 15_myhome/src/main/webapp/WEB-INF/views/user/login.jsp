@@ -13,7 +13,7 @@
   <form method="post" action="${contextPath}/user/login.do">
     <div>
       <label for="email">아이디</label>
-      <input type="text" name="email" id="email" placeholder="admin@gmail.cpm">
+      <input type="text" name="email" id="email" placeholder="admin@gmail.com">
     </div>    
     <div>
       <label for="pw">비밀번호</label>

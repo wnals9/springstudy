@@ -97,7 +97,10 @@ public class UserController {
     userService.modifyPw(request, response);
   }
   
-  
+  @PostMapping("/leave.do")
+  public void leave(HttpServletRequest request, HttpServletResponse response) {
+    userService.leave(request, response);
+  }
   
   
   

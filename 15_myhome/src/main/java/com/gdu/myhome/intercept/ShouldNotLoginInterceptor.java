@@ -9,13 +9,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-/**
- * LoginStatusCheckInterceptor2
- * 로그인이 필요한 기능을 요청할 때 로그인 여부를 점검하는 인터셉터
- */
-
 @Component
-public class LoginStatusCheckInterceptor2 implements HandlerInterceptor {
+public class ShouldNotLoginInterceptor implements HandlerInterceptor {
   
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -26,7 +21,7 @@ public class LoginStatusCheckInterceptor2 implements HandlerInterceptor {
       response.setContentType("text/html; charset=UTF-8");
       PrintWriter out = response.getWriter();
       out.println("<script>");
-      out.println("alert('이미 로그인 되어있습니다.')");
+      out.println("alert('해당 기능은 사용할 수 없습니다.')");
       out.println("history.back()");
       out.println("</script>");
       out.flush();

@@ -8,6 +8,7 @@ $(() => {
   fnCheckMobile();
   fnModifyUser();
   fnModifyPasswordForm();
+  fnLeaveUser();
 })
 
 
@@ -86,5 +87,14 @@ const fnModifyUser = () => {
 const fnModifyPasswordForm = () => {
   $('#btn_modify_pw').click(() => {
     location.href = getContextPath() + '/user/modifyPw.form';
+  })
+}
+
+const fnLeaveUser = () => {
+  $('#btn_leave').click(() => {
+    if(confirm('회원 탈퇴하시겠습니까?')){
+      $('#frm_mypage').prop('action', getContextPath() + '/user/leave.do');
+      $('#frm_mypage').submit();
+    }
   })
 }

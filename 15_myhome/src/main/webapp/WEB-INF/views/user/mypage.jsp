@@ -14,7 +14,7 @@
 
 <div>
 
-  <form id="frm_mypage">
+  <form id="frm_mypage" method="post">
     
     <h1>마이페이지</h1>
     
