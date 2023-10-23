@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
     // 메일 전송
     myJavaMailUtils.sendJavaMail(email
                                , "myhome 인증 코드"
-                               , "<div>인증코드는 <strong>" + code + "</strong>입니다.</div>"); 
+                               , "<div>인증코드는 <strong>" + code + "</strong>입니다.</div>");
     
     return new ResponseEntity<>(Map.of("code", code), HttpStatus.OK);
     
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
       } else {
         out.println("alert('회원 가입이 실패했습니다.')");
         out.println("history.go(-2)");
-      } 
+      }
       out.println("</script>");
       out.flush();
       out.close();
@@ -158,7 +158,90 @@ public class UserServiceImpl implements UserService {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    
   }
-  
+
+  @Override
+  public ResponseEntity<Map<String, Object>> modify(HttpServletRequest request) {
+    
+    String name = mySecurityUtils.preventXSS(request.getParameter("name"));
+    String gender = request.getParameter("gender");
+    String mobile = request.getParameter("mobile");
+    String postcode = request.getParameter("postcode");
+    String roadAddress = request.getParameter("roadAddress");
+    String jibunAddress = request.getParameter("jibunAddress");
+    String detailAddress = mySecurityUtils.preventXSS(request.getParameter("detailAddress"));
+    String event = request.getParameter("event");
+    int agree = event.equals("on") ? 1 : 0;
+    int userNo = Integer.parseInt(request.getParameter("userNo"));
+    
+    UserDto user = UserDto.builder()
+        .name(name)
+        .gender(gender)
+        .mobile(mobile)
+        .postcode(postcode)
+        .roadAddress(roadAddress)
+        .jibunAddress(jibunAddress)
+        .detailAddress(detailAddress)
+        .agree(agree)
+        .userNo(userNo)
+        .build();
+    
+    int modifyResult = userMapper.updateUser(user);
+    
+    if(modifyResult == 1) {
+      HttpSession session = request.getSession();
+      UserDto sessionUser = (UserDto)session.getAttribute("user");
+      sessionUser.setName(name);
+      sessionUser.setGender(gender);
+      sessionUser.setMobile(mobile);
+      sessionUser.setPostcode(postcode);
+      sessionUser.setRoadAddress(roadAddress);
+      sessionUser.setJibunAddress(jibunAddress);
+      sessionUser.setDetailAddress(detailAddress);
+      sessionUser.setAgree(agree);
+    }
+    
+    return new ResponseEntity<>(Map.of("modifyResult", modifyResult), HttpStatus.OK);
+    
+  }
+
+  @Override
+  public void modifyPw(HttpServletRequest request, HttpServletResponse response) {
+    
+    String pw = mySecurityUtils.getSHA256(request.getParameter("pw"));
+    int userNo = Integer.parseInt(request.getParameter("userNo"));
+    
+    UserDto user = UserDto.builder()
+                    .pw(pw)
+                    .userNo(userNo)
+                    .build();
+    
+    int modifyPwResult = userMapper.updateUserPw(user);
+    
+    try {
+      
+      response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.println("<script>");
+      if(modifyPwResult == 1) {
+        HttpSession session = request.getSession();
+        UserDto sessionUser = (UserDto)session.getAttribute("user");
+        sessionUser.setPw(pw);
+        out.println("alert('비밀번호가 수정되었습니다.')");
+        out.println("location.href='" + request.getContextPath() + "/user/mypage.form'");
+      } else {
+        out.println("alert('비밀번호가 수정되지 않았습니다.')");
+        out.println("history.back()");
+      }
+      out.println("</script>");
+      out.flush();
+      out.close();
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+  }
   
 }
