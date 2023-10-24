@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gdu.myhome.dao.UserMapper;
+import com.gdu.myhome.dto.InactiveUserDto;
 import com.gdu.myhome.dto.UserDto;
 import com.gdu.myhome.util.MyJavaMailUtils;
 import com.gdu.myhome.util.MySecurityUtils;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
   private final MyJavaMailUtils myJavaMailUtils;
   
   @Override
-  public void login(HttpServletRequest request, HttpServletResponse response) {
+  public void login(HttpServletRequest request, HttpServletResponse response) throws Exception {
     
     String email = request.getParameter("email");
     String pw = mySecurityUtils.getSHA256(request.getParameter("pw"));
@@ -38,6 +39,18 @@ public class UserServiceImpl implements UserService {
     Map<String, Object> map = Map.of("email", email
                                    , "pw", pw);
     
+    HttpSession session = request.getSession();
+    
+    // 휴면 계정인지 확인하기
+    InactiveUserDto inactiveUser = userMapper.getInactiveUser(map);
+    if(inactiveUser != null) {
+      // 정보저장 (inactiveUser)
+      session.setAttribute("inactiveUser", inactiveUser);
+      // 이동 (/user/active.form) -> user/active.jsp
+      response.sendRedirect(request.getContextPath() + "/user/active.form");
+    }
+    
+    // 정상적인 로그인 처리하기
     UserDto user = userMapper.getUser(map);
     
     if(user != null) {
