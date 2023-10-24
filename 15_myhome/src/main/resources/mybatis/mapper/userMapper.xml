@@ -105,6 +105,26 @@
       FROM USER_T
      WHERE USER_NO = #{userNo}
   </delete>
+  
+  <insert id="insertInactiveUser">
+    INSERT INTO INACTIVE_USER_T (
+    SELECT USER_NO, U.EMAIL, PW, NAME, GENDER, MOBILE, POSTCODE, ROAD_ADDRESS, JIBUN_ADDRESS, DETAIL_ADDRESS, AGREE, PW_MODIFIED_AT, JOINED_AT, SYSDATE
+      FROM USER_T U LEFT OUTER JOIN ACCESS_T A
+        ON U.EMAIL = A.EMAIL
+     WHERE MONTHS_BETWEEN(SYSDATE, LOGIN_AT) >= 12
+        OR (LOGIN_AT IS NULL AND MONTHS_BETWEEN(SYSDATE, JOINED_AT) >= 12)
+    )
+  </insert>
+  
+  <delete id="deleteUserForInactive">
+    DELETE
+      FROM USER_T
+     WHERE EMAIL IN(SELECT U.EMAIL
+                    FROM USER_T U LEFT OUTER JOIN ACCESS_T A
+                      ON U.EMAIL = A.EMAIL
+                   WHERE MONTHS_BETWEEN(SYSDATE, LOGIN_AT) >= 12
+                      OR (LOGIN_AT IS NULL AND MONTHS_BETWEEN(SYSDATE, JOINED_AT) >= 12))
+  </delete>
 
 
 </mapper>

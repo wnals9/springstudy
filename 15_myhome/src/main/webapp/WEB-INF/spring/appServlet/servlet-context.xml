@@ -27,7 +27,7 @@
       <interceptor>
         <mapping path="/user/mypage.form"/>
         <mapping path="/user/modifyPw.form"/>
-        <beans:bean class="com.gdu.myhome.intercept.LoginStatusCheckInterceptor"/>
+        <beans:bean class="com.gdu.myhome.intercept.RequiredLoginInterceptor"/>
       </interceptor>
     </interceptors>
     

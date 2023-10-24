@@ -299,4 +299,10 @@ public class UserServiceImpl implements UserService {
     
   }
   
+  @Override
+  public void inactiveUserBatch() {
+    userMapper.insertInactiveUser();
+    userMapper.deleteUserForInactive();
+  }
+  
 }

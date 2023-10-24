@@ -15,7 +15,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
  */
 
 @Component
-public class LoginStatusCheckInterceptor implements HandlerInterceptor {
+public class RequiredLoginInterceptor implements HandlerInterceptor {
   
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
