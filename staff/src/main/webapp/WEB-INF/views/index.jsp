@@ -72,14 +72,20 @@
       	url: '${contextPath}/query.json?query=' + $('#query').val(),
         dataType: 'json',
         success: (resData) => {
-          $('#staff_list').empty();
-        	let tr = '<tr>';
-        	tr += '<td>'+ resData.staff.sno +'</td>';
-        	tr += '<td>'+ resData.staff.name +'</td>';
-        	tr += '<td>'+ resData.staff.dept +'</td>';
-        	tr += '<td>'+ resData.staff.salary +'</td>';
-        	tr += '</tr>';
-        	$('#staff_list').append(tr);
+        	console.log(resData);
+          if(resData.staff === null){
+        	alert('조회된 사원 정보가 없습니다.');
+        	return;
+          } else {
+            $('#staff_list').empty();
+          	let tr = '<tr>';
+          	tr += '<td>'+ resData.staff.sno +'</td>';
+          	tr += '<td>'+ resData.staff.name +'</td>';
+          	tr += '<td>'+ resData.staff.dept +'</td>';
+          	tr += '<td>'+ resData.staff.salary +'</td>';
+          	tr += '</tr>';
+          	$('#staff_list').append(tr);
+          }
         }
       })
   	})
