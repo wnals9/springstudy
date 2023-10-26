@@ -122,6 +122,7 @@ INSERT INTO ACCESS_T VALUES('user2@naver.com', TO_DATE('20220201', 'YYYYMMDD'));
                                                                                   -- 휴면 회원 (user3)
 COMMIT;
 
+-- 원글 입력
 INSERT INTO FREE_T VALUES(FREE_SEQ.NEXTVAL, 'user1@naver.com', '내용1', SYSTIMESTAMP, 1, 0, FREE_SEQ.CURRVAL, 0);
 INSERT INTO FREE_T VALUES(FREE_SEQ.NEXTVAL, 'user2@naver.com', '내용2', SYSTIMESTAMP, 1, 0, FREE_SEQ.CURRVAL, 0);
 INSERT INTO FREE_T VALUES(FREE_SEQ.NEXTVAL, 'user2@naver.com', '내용3', SYSTIMESTAMP, 1, 0, FREE_SEQ.CURRVAL, 0);
