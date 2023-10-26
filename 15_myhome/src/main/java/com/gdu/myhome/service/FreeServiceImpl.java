@@ -136,7 +136,7 @@ public class FreeServiceImpl implements FreeService {
     model.addAttribute("beginNo", total - (page - 1) * display);
     
   }
-
+  
   
   
   
