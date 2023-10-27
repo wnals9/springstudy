@@ -46,5 +46,10 @@
     )
   </insert>
   
+  <select id="getBlogImageInYesterDay" resultType="BlogImageDto">
+    SELECT BLOG_NO, IMAGE_PATH, FILESYSTEMNAME
+      FROM BLOG_IMAGE_T
+     WHERE IMAGE_PATH = '/blog/' || TO_CHAR(SYSDATE - 1, 'YYYY/MM/DD')
+  </select>
 
 </mapper>
