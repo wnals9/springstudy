@@ -203,4 +203,10 @@
     )
   </insert>
   
+  <update id="deleteComment" parameterType="int">
+    UPDATE COMMENT_T
+       SET STATUS = 0
+     WHERE COMMENT_NO = #{commentNo}
+  </update>
+  
 </mapper>
