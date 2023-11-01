@@ -6,18 +6,23 @@
 <mapper namespace="com.gdu.myhome.dao.UploadMapper">
 
   <insert id="insertUpload" parameterType="UploadDto">
+    <!-- INSERT 수행 이전에 파라미터 UploadDto의 uploadNo 필드에 UPLOAD_SEQ.NEXTVAL값을 저장한다. -->
+    <selectKey order="BEFORE" resultType="int" keyProperty="uploadNo">
+      SELECT UPLOAD_SEQ.NEXTVAL
+        FROM DUAL
+    </selectKey>
     INSERT INTO UPLOAD_T (
         UPLOAD_NO
       , TITLE
-      , COTENTS
+      , CONTENTS
       , USER_NO
       , CREATED_AT
       , MODIFIED_AT
     ) VALUES (
-        UPLOAD_SEQ.NEXTVAL
+        #{uploadNo}
       , #{title}
       , #{contents}
-      , #{UserDto.userNo}
+      , #{userDto.userNo}
       , TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
       , TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
     )

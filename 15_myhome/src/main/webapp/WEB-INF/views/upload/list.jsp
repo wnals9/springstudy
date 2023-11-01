@@ -24,6 +24,20 @@
 
 <script>
 
+  const fnAddResult = () => {
+	let addResult = '${addResult}';  // '', 'true', 'false'
+	if(addResult !== ''){
+	  if(addResult === 'true'){
+		alert('성공적으로 업로드 되었습니다.');
+		// 목록 갱신
+	  } else {
+		alert('업로드가 실패하였습니다.');  
+	  }
+	}  
+  }
+  
+  fnAddResult();
+
 </script>
 
 <%@ include file="../layout/footer.jsp" %>

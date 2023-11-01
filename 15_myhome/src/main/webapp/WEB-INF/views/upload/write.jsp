@@ -30,7 +30,7 @@
       <label for="files">첨부</label>
       <input class="form-control" type="file" name="files"  id="files" multiple>
     </div>
-    <div class="d-grid gap-3" style="margin-top: 24px;">
+    <div class="d-grid gap-3" style="margin-top: 24x;">
       <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
       <button type="submit" class="btn btn-primary">작성완료</button>
     </div>
