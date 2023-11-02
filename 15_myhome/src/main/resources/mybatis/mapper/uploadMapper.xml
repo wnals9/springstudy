@@ -6,13 +6,13 @@
 <mapper namespace="com.gdu.myhome.dao.UploadMapper">
 
   <!-- UploadDto에는 UserDto가 포함되어 있으므로 resultMap을 만들어서 UploadDto의 설명을 넣어줌 -->
-  <resultMap type="UploadDto"     id="UploadMap">
-    <id      column="UPLOAD_NO"   property="uploadNo"/>
-    <result  column="TITLE"       property="title"/>
-    <result  column="CONTENTS"    property="contents"/>
-    <result  column="CREATED_AT"  property="createdAt"/>
-    <result  column="MODIFIED_AT" property="modifiedAt"/>
-    <result  javaType="int"       property="attachCount"/>
+  <resultMap type="UploadDto"      id="UploadMap">
+    <id      column="UPLOAD_NO"    property="uploadNo"/>
+    <result  column="TITLE"        property="title"/>
+    <result  column="CONTENTS"     property="contents"/>
+    <result  column="CREATED_AT"   property="createdAt"/>
+    <result  column="MODIFIED_AT"  property="modifiedAt"/>
+    <result  column="ATTACH_COUNT" property="attachCount"/>
     <association javaType="UserDto"      property="userDto">
       <id        column="USER_NO"        property="userNo"/>
       <result    column="EMAIL"          property="email" />
@@ -75,7 +75,7 @@
   </insert>
   
   <select id="getUploadCount" resultType="int">
-    SECLET COUNT(*)
+    SELECT COUNT(*)
       FROM UPLOAD_T
   </select>
   
