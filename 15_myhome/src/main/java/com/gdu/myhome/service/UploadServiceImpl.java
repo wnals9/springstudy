@@ -1,6 +1,7 @@
 package com.gdu.myhome.service;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,11 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -25,8 +31,8 @@ import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 
 @Transactional
-@Service
 @RequiredArgsConstructor
+@Service
 public class UploadServiceImpl implements UploadService {
 
   private final UploadMapper uploadMapper;
@@ -50,9 +56,10 @@ public class UploadServiceImpl implements UploadService {
     
     int uploadCount = uploadMapper.insertUpload(upload);
     
-    List<MultipartFile> files = multipartRequest.getFiles("files");  // "files" = 파라미터
+    List<MultipartFile> files = multipartRequest.getFiles("files");
     
-    // 첨부 없을 때
+    // 첨부 없을 때 : [MultipartFile[field="files", filename=, contentType=application/octet-stream, size=0]]
+    // 첨부 1개     : [MultipartFile[field="files", filename="animal1.jpg", contentType=image/jpeg, size=123456]]
     
     int attachCount;
     if(files.get(0).getSize() == 0) {
@@ -77,8 +84,8 @@ public class UploadServiceImpl implements UploadService {
         
         multipartFile.transferTo(file);
         
-        String contentType = Files.probeContentType(file.toPath());  // 이미지의 Content-Type : image/jpeg, image/png 등 image로 시작한다.
-        int hasThumbnail = (contentType != null && contentType.startsWith("image")) ? 1 : 0;  // 반드시 null 체크 먼저  contentType.startsWith("image") && contentType != null 이건 틀린것!!
+        String contentType = Files.probeContentType(file.toPath());  // 이미지의 Content-Type은 image/jpeg, image/png 등 image로 시작한다.
+        int hasThumbnail = (contentType != null && contentType.startsWith("image")) ? 1 : 0;
         
         if(hasThumbnail == 1) {
           File thumbnail = new File(dir, "s_" + filesystemName);  // small 이미지를 의미하는 s_을 덧붙임
@@ -92,7 +99,6 @@ public class UploadServiceImpl implements UploadService {
                             .originalFilename(originalFilename)
                             .filesystemName(filesystemName)
                             .hasThumbnail(hasThumbnail)
-                            .downloadCount(0)
                             .uploadNo(upload.getUploadNo())
                             .build();
         
@@ -103,6 +109,7 @@ public class UploadServiceImpl implements UploadService {
     }  // for
     
     return (uploadCount == 1) && (files.size() == attachCount);
+    
   }
   
   @Transactional(readOnly=true)
@@ -137,5 +144,58 @@ public class UploadServiceImpl implements UploadService {
     model.addAttribute("attachList", uploadMapper.getAttachList(uploadNo));
     
   }
+  
+  @Override
+  public ResponseEntity<Resource> download(HttpServletRequest request) {
+    
+    // 첨부 파일의 정보 가져오기
+    int attachNo = Integer.parseInt(request.getParameter("attachNo"));
+    AttachDto attach = uploadMapper.getAttach(attachNo);
+    
+    // 첨부 파일 File 객체 -> Resource 객체
+    File file = new File(attach.getPath(), attach.getFilesystemName());
+    Resource resource = new FileSystemResource(file);
+    
+    // 첨부 파일이 없으면 다운로드 취소
+    if(!resource.exists()) {
+      return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+    }
+    
+    // 사용자가 다운로드 받을 파일의 이름 결정 (User-Agent값에 따른 인코딩 처리)
+    String originalFilename = attach.getOriginalFilename();
+    String userAgent = request.getHeader("User-Agent");
+    try {
+      // IE
+      if(userAgent.contains("Trident")) {
+        originalFilename = URLEncoder.encode(originalFilename, "UTF-8").replace("+", " ");
+      }
+      // Edge
+      else if(userAgent.contains("Edg")) {
+        originalFilename = URLEncoder.encode(originalFilename, "UTF-8");
+      }
+      // Other
+      else {
+        originalFilename = new String(originalFilename.getBytes("UTF-8"), "ISO-8859-1");
+      }
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+    
+    // 다운로드 응답 헤더 만들기
+    HttpHeaders header = new HttpHeaders();
+    header.add("Content-Type", "application/octet-stream");
+    header.add("Content-Disposition", "attachment; filename=" + originalFilename);
+    header.add("Content-Length", file.length() + "");
+    
+    // 응답
+    return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
+    
+  }
+  
+  
+  
+  
+  
+  
   
 }

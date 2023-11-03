@@ -11,8 +11,8 @@
 </jsp:include>
 
 <style>
-  .attach{
-     cursor: pointer;
+  .attach {
+    cursor: pointer;
   }
 </style>
 
@@ -60,16 +60,11 @@
 <script>
 
   const fnDownload = () => {
-	$('.attach').click(function(){
-	  if(confirm('다운로드 할까요?')){
-		$.ajax({
-		  type: 'get',
-		  url: '${contextPath}/upload/download.do',
-		  data: 'attachNo=' + $(this).data('attach_no'),
-		})	
-	    loaction.href = '${contextPath}/upload/download.do?attachNo=' + 
-	  }
-	})
+	  $('.attach').click(function(){
+		  if(confirm('다운로드 할까요?')){
+			  location.href = '${contextPath}/upload/download.do?attachNo=' + $(this).data('attach_no');
+		  }
+	  })
   }
   
   fnDownload();

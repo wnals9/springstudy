@@ -97,7 +97,7 @@
         ON USR.USER_NO = UP.USER_NO
      WHERE UP.UPLOAD_NO = #{uploadNo}
   </select>
-  
+
   <select id="getAttachList" parameterType="int" resultType="AttachDto">
     SELECT ATTACH_NO, PATH, ORIGINAL_FILENAME, FILESYSTEM_NAME, DOWNLOAD_COUNT, HAS_THUMBNAIL, UPLOAD_NO
       FROM ATTACH_T
@@ -111,10 +111,18 @@
   </select>
   
   <update id="updateDownloadCount" parameterType="int">
-    UPDATE ATTACH_T
+    UPADTE ATTACH_T
        SET DOWNLOAD_COUNT = DOWNLOAD_COUNT + 1
-     WHERE UPLOAD_NO = #{uploadNo}
+     WHERE ATTACH_NO = #{attachNo}
   </update>
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
