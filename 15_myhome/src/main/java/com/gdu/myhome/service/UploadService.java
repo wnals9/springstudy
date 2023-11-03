@@ -14,4 +14,5 @@ public interface UploadService {
   public Map<String, Object> getUploadList(HttpServletRequest request);
   public void loadUpload(HttpServletRequest request, Model model);
   public ResponseEntity<Resource> download(HttpServletRequest request);
+  public ResponseEntity<Resource> downloadAll(HttpServletRequest request);
 }

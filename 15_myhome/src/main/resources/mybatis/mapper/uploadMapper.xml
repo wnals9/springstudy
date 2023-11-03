@@ -111,7 +111,7 @@
   </select>
   
   <update id="updateDownloadCount" parameterType="int">
-    UPADTE ATTACH_T
+    UPDATE ATTACH_T
        SET DOWNLOAD_COUNT = DOWNLOAD_COUNT + 1
      WHERE ATTACH_NO = #{attachNo}
   </update>
