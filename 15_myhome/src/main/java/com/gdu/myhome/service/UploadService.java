@@ -15,4 +15,5 @@ public interface UploadService {
   public void loadUpload(HttpServletRequest request, Model model);
   public ResponseEntity<Resource> download(HttpServletRequest request);
   public ResponseEntity<Resource> downloadAll(HttpServletRequest request);
+  public void removeTempFiles();
 }

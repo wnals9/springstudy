@@ -272,7 +272,17 @@ public class UploadServiceImpl implements UploadService {
     
   }
   
-  
+  @Override
+  public void removeTempFiles() {
+    File tempDir = new File(myFileUtils.getTempPath());
+    File[] targetList = tempDir.listFiles();
+    if(targetList != null) {
+      for(File target : targetList) {
+        target.delete();
+      }
+    }
+    
+  }
   
   
   
