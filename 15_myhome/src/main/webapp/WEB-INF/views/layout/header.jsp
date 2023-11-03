@@ -37,8 +37,8 @@
     </div>
     <div class="gnb_wrap">
       <ul class="gnb">
-        <li><a href="${contextPath}/free/list.do">계층게시판</a></li>
-        <li><a href="${contextPath}/blog/list.do">댓글형게시판</a></li>
+        <li><a href="${contextPath}/free/list.do">자유게시판</a></li>
+        <li><a href="${contextPath}/blog/list.do">블로그게시판</a></li>
         <li><a href="${contextPath}/upload/list.do">첨부게시판</a></li>
         <li><a href="${contextPath}/user/mypage.form">MY</a></li>
       </ul>
