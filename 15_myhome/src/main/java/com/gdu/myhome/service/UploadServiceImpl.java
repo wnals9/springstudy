@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -104,6 +105,7 @@ public class UploadServiceImpl implements UploadService {
     return (uploadCount == 1) && (files.size() == attachCount);
   }
   
+  @Transactional(readOnly=true)
   @Override
   public Map<String, Object> getUploadList(HttpServletRequest request) {
     
@@ -121,6 +123,18 @@ public class UploadServiceImpl implements UploadService {
     
     return Map.of("uploadList", uploadList
                 , "totalPage", myPageUtils.getTotalPage());
+    
+  }
+  
+  @Transactional(readOnly=true)
+  @Override
+  public void loadUpload(HttpServletRequest request, Model model) {
+    
+    Optional<String> opt = Optional.ofNullable(request.getParameter("uploadNo"));
+    int uploadNo = Integer.parseInt(opt.orElse("0"));
+    
+    model.addAttribute("upload", uploadMapper.getUpload(uploadNo));
+    model.addAttribute("attachList", uploadMapper.getAttachList(uploadNo));
     
   }
   
