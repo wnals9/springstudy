@@ -60,6 +60,15 @@
   
 <script>
 
+  var frmBtn = $('#frm_btn');
+
+  const fnEdit = () => {
+	$('#btn_edit').click(() => {
+	  frmBtn.attr('action', '${contextPath}/upload/edit.form');
+	  frmBtn.submit();
+	})
+  }
+
   const fnDownload = () => {
     $('.attach').click(function(){
   	  if(confirm('다운로드 할까요?')){
@@ -68,8 +77,7 @@
     })
   }
   
-  
-  
+  fnEdit();
   fnDownload();
   
 </script>
