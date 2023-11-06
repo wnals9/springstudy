@@ -124,6 +124,12 @@
      WHERE UPLOAD_NO = #{uploadNo}
   </update>
   
+  <delete id="deleteAttach" parameterType="int">
+    DELETE
+      FROM ATTACH_T
+     WHERE ATTACH_NO = #{attachNo}
+  </delete>
+  
   
   
   

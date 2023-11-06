@@ -26,11 +26,13 @@
   <div>내용</div>
   <div>${upload.contents}</div>
   <div>
-    <form id="frm_btn" method="post">
-      <input type="hidden" name="uploadNo" value="${upload.uploadNo}">
-      <button type="button" id="btn_edit">편집</button>
-      <button type="button" id="btn_remove">삭제</button>
-    </form>
+    <c:if test="${sessionScope.user.userNo == upload.userDto.userNo}">
+      <form id="frm_btn">
+        <input type="hidden" name="uploadNo" value="${upload.uploadNo}">
+        <button type="button" id="btn_edit">편집</button>
+        <button type="button" id="btn_remove">삭제</button>
+      </form>
+    </c:if>
   </div>
   
   <hr>
@@ -63,10 +65,11 @@
   var frmBtn = $('#frm_btn');
 
   const fnEdit = () => {
-	$('#btn_edit').click(() => {
-	  frmBtn.attr('action', '${contextPath}/upload/edit.form');
-	  frmBtn.submit();
-	})
+    $('#btn_edit').click(() => {
+  	  frmBtn.attr('action', '${contextPath}/upload/edit.form');
+  	  frmBtn.attr('method', 'get');
+  	  frmBtn.submit();
+    })
   }
 
   const fnDownload = () => {
