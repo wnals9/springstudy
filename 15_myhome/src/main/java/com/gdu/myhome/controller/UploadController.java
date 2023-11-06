@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdu.myhome.dto.UploadDto;
 import com.gdu.myhome.service.UploadService;
 
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,19 @@ public class UploadController {
                    , Model model) {
     model.addAttribute("upload", uploadService.getUpload(uploadNo));
     return "upload/edit";
+  }
+  
+  @PostMapping("/modify.do")
+  public String modify(UploadDto upload, RedirectAttributes redirectAttributes) {
+    int modifyResult = uploadService.modifyUpload(upload);
+    redirectAttributes.addFlashAttribute("modifyResult", modifyResult);
+    return "redirect:/upload/detail.do?uploadNo=" + upload.getUploadNo();
+  }
+  
+  @ResponseBody
+  @GetMapping(value="/getAttachList.do", produces="application/json")
+  public Map<String, Object> getAttachList(HttpServletRequest request) {
+    return uploadService.getAttachList(request);
   }
     
 }
