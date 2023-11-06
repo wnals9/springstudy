@@ -127,6 +127,19 @@
 	})
   }
   
+  const fnRemoveResult = () => {
+	let fnRemoveResult = '${fnRemoveResult}';
+	if(fnRemoveResult !== ''){
+	  if(fnRemoveResult === '1'){
+		alert('게시글이 삭제되었습니다.');
+		$('#upload_list').empty();
+	  } else {
+		alert('게시글이 삭제가 실패했습니다.');	  
+	  }
+	}
+  }
+  
+  fnRemoveResult();
   fnUploadDetail();
   fnGetUploadList();
   fnScroll();

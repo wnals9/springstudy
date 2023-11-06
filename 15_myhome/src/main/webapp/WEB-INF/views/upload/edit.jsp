@@ -23,7 +23,7 @@
       <div>내용</div>
       <div><textarea name="contents">${upload.contents}</textarea></div>
       <input type="hidden" name="uploadNo" value="${upload.uploadNo}">
-      <c:if test="${sessionScope.user.userNo == upload.userDto.userNo}">
+      <c:if test="${sessionScope.user.userNo == upload.userDto.userNo}">      
         <button type="submit" id="btn_modify">수정</button>
       </c:if>
     </form>
@@ -32,14 +32,14 @@
   <hr>
   
   <!-- 첨부 추가 -->
-  <c:if test="${sessionScope.user.userNo == upload.userDto.userNo}">
+  <c:if test="${sessionScope.user.userNo == upload.userDto.userNo}">      
     <div>
-      <label for="files">첨부</label>
-      <input class="form-control" type="file" name="files"  id="files" multiple>
+      <label for="files" class="form-label">첨부</label>
+      <input type="file" name="files" id="files" class="form-control" multiple>
     </div>
-    <div class="d-grid gap-3" style="margin-top: 24x;">
+    <div>
       <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
-      <button type="button" class="btn btn-primary" id="btn_add_attach">첨부 추가하기</button>
+      <button type="button" class="btn btn-primary" id="btn_add_attach">첨부추가하기</button>
     </div>
   </c:if>
   
@@ -129,7 +129,34 @@
   	  })
     })
   }
-	
+  
+  const fnFileCheck = () => {
+	    $('#files').change((ev) => {
+	      $('#file_list').empty();
+	      let maxSize = 1024 * 1024 * 100;
+	      let maxSizePerFile = 1024 * 1024 * 10;
+	      let totalSize = 0;
+	      let files = ev.target.files;
+	      for(let i = 0; i < files.length; i++){
+	        totalSize += files[i].size;
+	        if(files[i].size > maxSizePerFile){
+	          alert('각 첨부파일의 최대 크기는 10MB입니다.');
+	          $(ev.target).val('');
+	          $('#file_list').empty();
+	          return;
+	        }
+	        $('#file_list').append('<div>' + files[i].name + '</div>');
+	      }
+	      if(totalSize > maxSize){
+	        alert('전체 첨부파일의 최대 크기는 100MB입니다.');
+	        $(ev.target).val('');
+	        $('#file_list').empty();
+	        return;
+	      }
+	    })
+	  }
+
+  fnFileCheck();
   fnAddAttach();
   fnAttachList();
   fnRemoveAttach();

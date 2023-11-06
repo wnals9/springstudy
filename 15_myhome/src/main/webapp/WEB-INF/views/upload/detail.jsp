@@ -71,6 +71,18 @@
   	  frmBtn.submit();
     })
   }
+  
+  const fnRemove = () => {
+	$('#btn_remove').click(() => {
+	  if(confirm('해당 게시글을 삭제하시겠습니까?')) {
+  	  	frmBtn.attr('action', '${contextPath}/upload/removeUpload.do');
+    	frmBtn.attr('method', 'post');
+    	frmBtn.submit();
+	  } else {
+		return;
+	  }
+	})
+  }
 
   const fnDownload = () => {
     $('.attach').click(function(){
@@ -91,6 +103,7 @@
 	}
   }
   
+  fnRemove();
   fnEdit();
   fnDownload();
   fnModifyResult();
