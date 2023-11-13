@@ -13,74 +13,83 @@
 <script>
   
   $(() => {
-	  fnNaverJoin();
+    fnNaverJoin();
   })
   
   const fnNaverJoin = () => {
-	  $('#frm_naver_join').submit((ev) => {
-		  if(!$('#service').is(':checked')){
-			  alert('이용약관에 동의하세요.');
-			  ev.preventDefault();
-			  return;
-		  }
-	  })
+    $('#frm_naver_join').submit((ev) => {
+      if(!$('#service').is(':checked')){
+        alert('이용약관에 동의하세요.');
+        ev.preventDefault();
+        return;
+      }
+    })
   }
   
 </script>
 
-<div>
+<div class="wrap wrap_6">
+
+  <h1 class="title">네이버 간편가입</h1>
 
   <form id="frm_naver_join" method="post" action="${contextPath}/user/naver/join.do">
     
-    <h1>네이버간편가입</h1>
+    <div class="row mb-2">
+      <label for="email" class="col-sm-3 col-form-label">이메일</label>
+      <div class="col-sm-9"><input type="text" name="email" id="email" class="form-control" value="${naverProfile.email}" readonly></div>
+    </div>
     
-    <div>
-      <label for="email">이메일</label>
-      <input type="text" name="email" id="email" value="${naverProfile.email}" readonly>
+    <div class="row mb-2">
+      <label for="name" class="col-sm-3 col-form-label">이름</label>
+      <div class="col-sm-9"><input type="text" name="name" id="name" class="form-control" value="${naverProfile.name}" readonly></div>
     </div>
-  
-    <div>
-      <label for="name">이름</label>
-      <input type="text" name="name" id="name" value="${naverProfile.name}" readonly>
+
+    <div class="row mb-2">
+      <label for="mobile" class="col-sm-3 col-form-label">휴대전화번호</label>
+      <div class="col-sm-9"><input type="text" name="mobile" id="mobile" class="form-control" value="${naverProfile.mobile}" readonly></div>
     </div>
-  
-    <div>
-      <input type="radio" name="gender" value="M" id="man">
-      <label for="man">남자</label>
-      <input type="radio" name="gender" value="F" id="woman">
-      <label for="woman">여자</label>
+
+    <div class="row mb-2">
+      <label class="col-sm-3 form-label">성별</label>
+      <div class="col-sm-3">
+        <input type="radio" name="gender" value="M" id="man" class="form-check-input">
+        <label class="form-check-label" for="man">남자</label>
+      </div>
+      <div class="col-sm-3">
+        <input type="radio" name="gender" value="F" id="woman" class="form-check-input">
+        <label class="form-check-label" for="woman">여자</label>
+      </div>
     </div>
     <script>
       $(':radio[value=${naverProfile.gender}]').prop('checked', true);
     </script>
-  
-    <div>
-      <label for="mobile">휴대전화번호</label>
-      <input type="text" name="mobile" id="mobile" value="${naverProfile.mobile}" readonly>
-    </div>
 
-    <hr>
+    <hr class="my-3">
     
-    <div>
-      <input type="checkbox" name="service" id="service">
-      <label for="service">서비스 이용약관 동의(필수)</label>
+    <div class="form-check mt-3">
+      <input type="checkbox" name="service" class="form-check-input chk_each" id="service">
+      <label class="form-check-label" for="service">
+        서비스 이용약관 동의(필수)
+      </label>
     </div>
     <div>
-      <textarea>본 약관은 ...</textarea>
-    </div>
-    
-    <div>
-      <input type="checkbox" name="event" id="event">
-      <label for="event">이벤트 알림 동의(선택)</label>
-    </div>
-    <div>
-      <textarea>본 약관은 ...</textarea>
+      <textarea rows="5" class="form-control">본 약관은 ...</textarea>
     </div>
     
-    <hr>
+    <div class="form-check mt-3">
+      <input type="checkbox" name="event" class="form-check-input chk_each" id="event">
+      <label class="form-check-label" for="event">
+        이벤트 알림 동의(선택)
+      </label>
+    </div>
+    <div>
+      <textarea rows="5" class="form-control">본 약관은 ...</textarea>
+    </div>
+    
+    <hr class="my-3">
 
-    <div>
-      <button type="submit">회원가입하기</button>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">회원가입하기</button>
     </div>
     
   </form>

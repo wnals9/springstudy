@@ -5,8 +5,6 @@
   <jsp:param value="마이홈" name="title"/>
 </jsp:include>
 
-
-  <h1 style="text-align: center;">어서오세요</h1>
-
+  <h1 class="title">홈페이지에 오신걸 환영합니다</h1>
 
 <%@ include file="footer.jsp" %>

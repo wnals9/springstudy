@@ -7,36 +7,39 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>" />
 
 <jsp:include page="../layout/header.jsp">
-  <jsp:param value="업로드게시글작성" name="title"/>
+  <jsp:param value="업로드하기" name="title"/>
 </jsp:include>
 
-<div>
+<div class="wrap wrap_6">
 
-  <h1 style="text-align: center;">Upload 게시글 작성하기</h1>
-  <form method="post" action="${contextPath}/upload/add.do" enctype="multipart/form-data">
-    <div>
-      <label for="email">작성자</label>
-      <input type="text" class="form-control-plaintext" id="email" value="${sessionScope.user.email}" readonly>
+  <h1 class="title">업로드 하기</h1>
+  
+  <form id="frm_upload_add" method="post" action="${contextPath}/upload/add.do" enctype="multipart/form-data">
+    <div class="mt-3">
+      <label for="email" class="form-label">작성자</label>
+      <input type="text" id="email" class="form-control-plaintext" value="${sessionScope.user.email}" readonly>
     </div>
-    <div>
-      <label for="title">제목</label>
-      <input type="text" class="form-control" id="title" name="title">
+    <div class="mt-3">
+      <label for="title" class="form-label">제목</label>
+      <input type="text" name="title" id="title" class="form-control">
     </div>
-    <div>
-      <label for="contents">내용</label>
-      <textarea rows="12" cols="50" class="form-control" name="contents" id="contents"></textarea>
+    <div class="mt-3">
+      <label for="contents" class="form-label">내용</label>
+      <textarea rows="3" name="contents" id="contents" class="form-control"></textarea>
     </div>
-    <div>
-      <label for="files">첨부</label>
-      <input class="form-control" type="file" name="files"  id="files" multiple>
+    <div class="mt-3">
+      <label for="files" class="form-label">첨부</label>
+      <input type="file" name="files" id="files" class="form-control" multiple>
     </div>
-    <div class="d-grid gap-3" style="margin-top: 24x;">
+    <div class="attached_list mt-2" id="attached_list"></div>
+    <div class="text-center mt-5">
+      <a href="${contextPath}/upload/list.do">
+        <button class="btn btn-secondary" type="button">작성취소</button>
+      </a>
       <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
       <button type="submit" class="btn btn-primary">작성완료</button>
     </div>
   </form>
-  
-  <div id="file_list"></div>
   
 </div>
   
@@ -44,7 +47,7 @@
 
   const fnFileCheck = () => {
     $('#files').change((ev) => {
-      $('#file_list').empty();
+      $('#attached_list').empty();
       let maxSize = 1024 * 1024 * 100;
       let maxSizePerFile = 1024 * 1024 * 10;
       let totalSize = 0;
@@ -54,22 +57,34 @@
         if(files[i].size > maxSizePerFile){
           alert('각 첨부파일의 최대 크기는 10MB입니다.');
           $(ev.target).val('');
-          $('#file_list').empty();
+          $('#attached_list').empty();
           return;
         }
-        $('#file_list').append('<div>' + files[i].name + '</div>');
+        $('#attached_list').append('<div>' + files[i].name + '</div>');
       }
       if(totalSize > maxSize){
         alert('전체 첨부파일의 최대 크기는 100MB입니다.');
         $(ev.target).val('');
-        $('#file_list').empty();
+        $('#attached_list').empty();
         return;
       }
     })
   }
   
+  const fnSubmit = () => {
+	  $('#frm_upload_add').submit((ev) => {
+		  if($('#title').val() === ''){
+			  alert('제목은 반드시 입력해야 합니다.');
+			  $('#title').focus();
+			  ev.preventDefault();
+			  return;
+		  }
+	  })
+  }
+  
   fnFileCheck();
+  fnSubmit();
   
 </script>
-
+  
 <%@ include file="../layout/footer.jsp" %>

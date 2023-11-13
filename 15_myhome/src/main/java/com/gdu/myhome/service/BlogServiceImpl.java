@@ -2,6 +2,7 @@ package com.gdu.myhome.service;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,8 @@ public class BlogServiceImpl implements BlogService {
   @Override
   public int addBlog(HttpServletRequest request) {
 
+    //** 수정된 메소드 **//
+    
     // BLOG_T에 추가할 데이터
     String title = request.getParameter("title");
     String contents = request.getParameter("contents");
@@ -100,27 +103,43 @@ public class BlogServiceImpl implements BlogService {
     // insertBlog() 메소드로 전달한 blog 객체에 blogNo값이 저장된다.
     int addResult = blogMapper.insertBlog(blog);
     
-    // BLOG 작성시 사용한 이미지 목록 (Jsoup 라이브러리 사용)
-    Document document = Jsoup.parse(contents);
-    Elements elements =  document.getElementsByTag("img");
-    
-    if(elements != null) {
-      for(Element element : elements) {
-        String src = element.attr("src");
-        String filesystemName = src.substring(src.lastIndexOf("/") + 1); 
-        BlogImageDto blogImage = BlogImageDto.builder()
-                                    .blogNo(blog.getBlogNo())
-                                    .imagePath(myFileUtils.getBlogImagePath())
-                                    .filesystemName(filesystemName)
-                                    .build();
-        blogMapper.insertBlogImage(blogImage);
-      }
+    // Editor에 추가한 이미지 목록 가져와서 BLOG_IMAGE_T에 저장하기
+    for(String editorImage : getEditorImageList(contents)) {
+      BlogImageDto blogImage = BlogImageDto.builder()
+          .blogNo(blog.getBlogNo())
+          .imagePath(myFileUtils.getBlogImagePath())
+          .filesystemName(editorImage)
+          .build();
+      blogMapper.insertBlogImage(blogImage);
     }
     
     return addResult;
     
   }
   
+  public List<String> getEditorImageList(String contents) {
+    
+    //** 신규 메소드 **//
+    // Editor에 추가한 이미지 목록 반환하기 (Jsoup 라이브러리 사용)
+    
+    List<String> editorImageList = new ArrayList<>();
+    
+    Document document = Jsoup.parse(contents);
+    Elements elements =  document.getElementsByTag("img");
+    
+    if(elements != null) {
+      for(Element element : elements) {
+        String src = element.attr("src");
+        String filesystemName = src.substring(src.lastIndexOf("/") + 1);
+        editorImageList.add(filesystemName);
+      }
+    }
+    
+    return editorImageList;
+    
+  }
+  
+  @Transactional(readOnly=true)
   public void blogImageBatch() {
     
     // 1. 어제 작성된 블로그의 이미지 목록 (DB)
@@ -173,34 +192,94 @@ public class BlogServiceImpl implements BlogService {
     return blogMapper.updateHit(blogNo);
   }
   
+  @Transactional(readOnly=true)
   @Override
   public BlogDto getBlog(int blogNo) {
     return blogMapper.getBlog(blogNo);
   }
-  
+
   @Override
   public int modifyBlog(HttpServletRequest request) {
     
+    //** 수정된 메소드 **//
+    
+    // 수정할 제목/내용/블로그번호
     String title = request.getParameter("title");
     String contents = request.getParameter("contents");
     int blogNo = Integer.parseInt(request.getParameter("blogNo"));
     
+    // DB에 저장된 기존 이미지 가져오기
+    // 1. blogImageDtoList : BlogImageDto를 요소로 가지고 있음
+    // 2. blogImageList    : 이미지 이름(filesystemName)을 요소로 가지고 있음
+    List<BlogImageDto> blogImageDtoList = blogMapper.getBlogImageList(blogNo);
+    List<String> blogImageList = blogImageDtoList.stream()
+                                  .map(blogImageDto -> blogImageDto.getFilesystemName())
+                                  .collect(Collectors.toList());
+        
+    // Editor에 포함된 이미지 이름(filesystemName)
+    List<String> editorImageList = getEditorImageList(contents);
+
+    // Editor에 포함되어 있으나 기존 이미지에 없는 이미지는 BLOG_IMAGE_T에 추가해야 함
+    editorImageList.stream()
+      .filter(editorImage -> !blogImageList.contains(editorImage))         // 조건 : Editor에 포함되어 있으나 기존 이미지에 포함되어 있지 않다.
+      .map(editorImage -> BlogImageDto.builder()                           // 변환 : Editor에 포함된 이미지 이름을 BlogImageDto로 변환한다.
+                            .blogNo(blogNo)
+                            .imagePath(myFileUtils.getBlogImagePath())
+                            .filesystemName(editorImage)
+                            .build())
+      .forEach(blogImageDto -> blogMapper.insertBlogImage(blogImageDto));  // 순회 : 변환된 BlogImageDto를 BLOG_IMAGE_T에 추가한다.
+    
+    // 기존 이미지에 있으나 Editor에 포함되지 않은 이미지는 삭제해야 함
+    List<BlogImageDto> removeList = blogImageDtoList.stream()
+                                      .filter(blogImageDto -> !editorImageList.contains(blogImageDto.getFilesystemName()))  // 조건 : 기존 이미지 중에서 Editor에 포함되어 있지 않다.
+                                      .collect(Collectors.toList());                                                        // 조건을 만족하는 blogImageDto를 리스트로 반환한다.
+
+    for(BlogImageDto blogImageDto : removeList) {
+      // BLOG_IMAGE_T에서 삭제
+      blogMapper.deleteBlogImage(blogImageDto.getFilesystemName());  // 파일명은 UUID로 만들어졌으므로 파일명의 중복은 없다고 생각하면 된다.
+      // 파일 삭제
+      File file = new File(blogImageDto.getImagePath(), blogImageDto.getFilesystemName());
+      if(file.exists()) {
+        file.delete();
+      }
+    }
+    
+    // 수정할 제목/내용/블로그번호를 가진 BlogDto
     BlogDto blog = BlogDto.builder()
                     .title(title)
                     .contents(contents)
                     .blogNo(blogNo)
                     .build();
     
+    // BLOG_T 수정
     int modifyResult = blogMapper.updateBlog(blog);
     
     return modifyResult;
+    
   }
   
-@Override
+  @Override
   public int removeBlog(int blogNo) {
+    
+    //** 수정된 메소드 **//
+    
+    // BLOG_IMAGE_T 목록 가져와서 파일 삭제
+    List<BlogImageDto> blogImageList = blogMapper.getBlogImageList(blogNo);
+    for(BlogImageDto blogImage : blogImageList) {
+      File file = new File(blogImage.getImagePath(), blogImage.getFilesystemName());
+      if(file.exists()) {
+        file.delete();
+      }
+    }
+    
+    // BLOG_IMAGE_T 삭제
+    blogMapper.deleteBlogImageList(blogNo);
+    
+    // BLOG_T 삭제
     return blogMapper.deleteBlog(blogNo);
+    
   }
-
+  
   @Override
   public Map<String, Object> addComment(HttpServletRequest request) {
 
@@ -222,6 +301,7 @@ public class BlogServiceImpl implements BlogService {
     
   }
 
+  @Transactional(readOnly=true)
   @Override
   public Map<String, Object> loadCommentList(HttpServletRequest request) {
 
@@ -255,7 +335,7 @@ public class BlogServiceImpl implements BlogService {
     int blogNo = Integer.parseInt(request.getParameter("blogNo"));
     int groupNo = Integer.parseInt(request.getParameter("groupNo"));
     
-    CommentDto commentReply = CommentDto.builder()
+    CommentDto comment = CommentDto.builder()
                           .contents(contents)
                           .userDto(UserDto.builder()
                                     .userNo(userNo)
@@ -264,7 +344,7 @@ public class BlogServiceImpl implements BlogService {
                           .groupNo(groupNo)
                           .build();
     
-    int addCommentReplyResult = blogMapper.insertCommentReply(commentReply);
+    int addCommentReplyResult = blogMapper.insertCommentReply(comment);
     
     return Map.of("addCommentReplyResult", addCommentReplyResult);
     
@@ -275,10 +355,5 @@ public class BlogServiceImpl implements BlogService {
     int removeResult = blogMapper.deleteComment(commentNo);
     return Map.of("removeResult", removeResult);
   }
-  
-  
-  
-  
-  
   
 }
